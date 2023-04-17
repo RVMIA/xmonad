@@ -15,5 +15,5 @@ Config { font         = "Terminus"
                         ]
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = "%XMonadLog% }{ %multicpu% | %memory% | %enp10s0f3u1u2% | %KDFW% | %alsa:default:Master% | <fc=#DE5E5E>%date%</fc> "
+       , template     = "%XMonadLog% }{ %multicpu% | %memory% | %enp10s0f3u1u2% | %KDFW%F | Volume %alsa:default:Master% | <fc=#DE5E5E>%date%</fc> "
        }
