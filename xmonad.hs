@@ -38,6 +38,7 @@ myConfig = def
 	[ ("M-f", spawn "firefox-bin")
 	, ("M-S-l", spawn "slock")
 	, ("M-S-e", spawn "emacs")
+        , ("M-S-s", spawn "spotify")
 	]
 
 myManageHook :: ManageHook
@@ -64,19 +65,20 @@ myXmobarPP = def
   , ppExtras          = [logTitles formatFocused formatUnfocused]
   }
   where
-    formatFocused   = wrap (white    "[") (white    "]") . magenta . ppWindow
-    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . blue    . ppWindow
+    formatFocused   = wrap (white    "[") (white    "]") . walred . ppWindow
+    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow
   
     -- | Windows should have *some* title, which should not not exceed a
     -- sane length.
     ppWindow :: String -> String
     ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30
 
-    blue, lowWhite, magenta, red, white, yellow, walred :: String -> String
+    blue, lowWhite, magenta, red, white, yellow, walred, grey :: String -> String
     magenta  = xmobarColor "#ff79c6" ""
     blue     = xmobarColor "#bd93f9" ""
     white    = xmobarColor "#f8f8f2" ""
     yellow   = xmobarColor "#f1fa8c" ""
     red      = xmobarColor "#ff5555" ""
     lowWhite = xmobarColor "#bbbbbb" ""
+    grey = xmobarColor "#8e8e8e" ""
     walred = xmobarColor "#de5e5e" ""
