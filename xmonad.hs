@@ -40,6 +40,7 @@ myConfig = def
 	, ("M-S-e", spawn "emacs")
         , ("M-S-s", spawn "spotify")
         , ("M-S-v", spawn "vscode")
+        , ("M-S-t", spawn "thunar")
 	]
 
 myManageHook :: ManageHook
