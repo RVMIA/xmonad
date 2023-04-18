@@ -25,33 +25,7 @@ myNormalBorderColor = "#222222"
 
 myFocusedBorderColor = "#DE5e5e"
 
-main :: IO ()
-main =
-  xmonad
-    . ewmhFullscreen
-    . ewmh
-    . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
-    $ myConfig
 
-myConfig =
-  def
-    { terminal = myTerm,
-      modMask = myModMask,
-      borderWidth = myBorderWidth,
-      normalBorderColor = myNormalBorderColor,
-      focusedBorderColor = myFocusedBorderColor,
-      manageHook = myManageHook,
-      layoutHook = myLayout
-    }
-    `additionalKeysP` [ ("M-f", spawn "firefox"),
-                        ("M-S-l", spawn "slock"),
-                        ("M-S-e", spawn "emacs"),
-                        ("M-S-p", spawn "spotify"),
-                        ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),
-                        ("M-S-v", spawn "code"),
-                        ("M-S-t", spawn "thunar"),
-                        ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess))
-                      ]
 
 myManageHook :: ManageHook
 myManageHook =
@@ -102,5 +76,41 @@ myXPConfig = def
   { position = Top
   , alwaysHighlight = True
   , promptBorderWidth = 0
-  , font = "Iosevka Comfy"
+  , font = "Terminus"
   }
+
+myStartupHook :: X ()
+myStartupHook = do
+  spawn "~/.config/xmonad/scripts/nitrogenbg.sh &"
+
+
+
+  main :: IO ()
+main =
+  xmonad
+    . ewmhFullscreen
+    . ewmh
+    . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+    $ myConfig
+
+myConfig =
+  def
+    { terminal = myTerm,
+      modMask = myModMask,
+      borderWidth = myBorderWidth,
+      normalBorderColor = myNormalBorderColor,
+      focusedBorderColor = myFocusedBorderColor,
+      manageHook = myManageHook,
+      layoutHook = myLayout,
+      startupHook = myStartupHook
+    }
+    `additionalKeysP`
+    [ ("M-f", spawn "firefox"),
+      ("M-S-l", spawn "slock"),
+      ("M-S-e", spawn "emacs"),
+      ("M-S-p", spawn "spotify"),
+      ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),
+      ("M-S-v", spawn "code"),
+      ("M-S-t", spawn "thunar"),
+      ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess))
+    ]
