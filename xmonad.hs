@@ -43,12 +43,12 @@ myConfig =
       manageHook = myManageHook,
       layoutHook = myLayout
     }
-    `additionalKeysP` [ ("M-f", spawn "firefox-bin"),
+    `additionalKeysP` [ ("M-f", spawn "firefox"),
                         ("M-S-l", spawn "slock"),
                         ("M-S-e", spawn "emacs"),
                         ("M-S-p", spawn "spotify"),
                         ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),
-                        ("M-S-v", spawn "vscode"),
+                        ("M-S-v", spawn "code"),
                         ("M-S-t", spawn "thunar"),
                         ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess))
                       ]
