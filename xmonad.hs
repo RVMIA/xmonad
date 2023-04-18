@@ -1,12 +1,19 @@
 import XMonad
+
+import XMonad.Prompt
+import XMonad.Prompt.ConfirmPrompt
+
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.ManageHook
+
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
+
+import System.Exit
 
 myTerm = "kitty"
 
@@ -42,7 +49,8 @@ myConfig =
                         ("M-S-p", spawn "spotify"),
                         ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),
                         ("M-S-v", spawn "vscode"),
-                        ("M-S-t", spawn "thunar")
+                        ("M-S-t", spawn "thunar"),
+                        ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess))
                       ]
 
 myManageHook :: ManageHook
@@ -89,3 +97,10 @@ myXmobarPP =
     lowWhite = xmobarColor "#bbbbbb" ""
     grey = xmobarColor "#8e8e8e" ""
     walred = xmobarColor "#de5e5e" ""
+
+myXPConfig = def
+  { position = Top
+  , alwaysHighlight = True
+  , promptBorderWidth = 0
+  , font = "Iosevka Comfy"
+  }
