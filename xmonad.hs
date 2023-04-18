@@ -1,19 +1,15 @@
+import System.Exit
 import XMonad
-
-import XMonad.Prompt
-import XMonad.Prompt.ConfirmPrompt
-
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.ManageHook
-
+import XMonad.Prompt
+import XMonad.Prompt.ConfirmPrompt
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
-
-import System.Exit
 
 myTerm = "kitty"
 
@@ -24,8 +20,6 @@ myBorderWidth = 3
 myNormalBorderColor = "#222222"
 
 myFocusedBorderColor = "#DE5e5e"
-
-
 
 myManageHook :: ManageHook
 myManageHook =
@@ -56,9 +50,6 @@ myXmobarPP =
   where
     formatFocused = wrap (white "[") (white "]") . walred . ppWindow
     formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow
-
-    -- \| Windows should have *some* title, which should not not exceed a
-    -- sane length.
     ppWindow :: String -> String
     ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30
 
@@ -72,20 +63,19 @@ myXmobarPP =
     grey = xmobarColor "#8e8e8e" ""
     walred = xmobarColor "#de5e5e" ""
 
-myXPConfig = def
-  { position = Top
-  , alwaysHighlight = True
-  , promptBorderWidth = 0
-  , font = "Terminus"
-  }
+myXPConfig =
+  def
+    { position = Top,
+      alwaysHighlight = True,
+      promptBorderWidth = 0,
+      font = "Terminus"
+    }
 
 myStartupHook :: X ()
 myStartupHook = do
   spawn "~/.config/xmonad/scripts/nitrogenbg.sh &"
 
-
-
-  main :: IO ()
+main :: IO ()
 main =
   xmonad
     . ewmhFullscreen
@@ -104,13 +94,12 @@ myConfig =
       layoutHook = myLayout,
       startupHook = myStartupHook
     }
-    `additionalKeysP`
-    [ ("M-f", spawn "firefox"),
-      ("M-S-l", spawn "slock"),
-      ("M-S-e", spawn "emacs"),
-      ("M-S-p", spawn "spotify"),
-      ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),
-      ("M-S-v", spawn "code"),
-      ("M-S-t", spawn "thunar"),
-      ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess))
-    ]
+    `additionalKeysP` [ ("M-f", spawn "firefox"),
+                        ("M-S-l", spawn "slock"),
+                        ("M-S-e", spawn "emacs"),
+                        ("M-S-p", spawn "spotify"),
+                        ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),
+                        ("M-S-v", spawn "code"),
+                        ("M-S-t", spawn "thunar"),
+                        ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess))
+                      ]
