@@ -1,27 +1,33 @@
 #+TITLE: XMonad Config
 #+PROPERTY: header-args :tangle xmonad.hs
-
 * XMonad Config
-
-* Imports
+** Imports
 Modules to import.
 #+begin_src haskell
-  import System.Exit                                                                                                                            
-  import XMonad                                                                                                                                 
-  import XMonad.Hooks.DynamicLog                                                                                                                
-  import XMonad.Hooks.EwmhDesktops                                                                                                              
-  import XMonad.Hooks.ManageHelpers                                                                                                             
-  import XMonad.Hooks.StatusBar                                                                                                                 
-  import XMonad.Hooks.StatusBar.PP                                                                                                              
-  import XMonad.ManageHook                                                                                                                      
-  import XMonad.Prompt                                                                                                                          
-  import XMonad.Prompt.ConfirmPrompt                                                                                                            
-  import XMonad.Util.EZConfig                                                                                                                   
+  import System.Exit
+  import Control.Monad
+
+  import XMonad
+
+  import XMonad.ManageHook
+  import XMonad.Hooks.DynamicLog
+  import XMonad.Hooks.EwmhDesktops
+  import XMonad.Hooks.ManageHelpers
+  import XMonad.Hooks.ManageDocks
+  import XMonad.Hooks.StatusBar
+  import XMonad.Hooks.StatusBar.PP
+
+  import XMonad.Prompt
+  import XMonad.Prompt.ConfirmPrompt
+
+  import XMonad.Util.EZConfig
   import XMonad.Util.Loggers
   import XMonad.Util.SpawnOnce
+  import XMonad.Util.Run
+  import XMonad.Util.Dmenu
 #+end_src
 
-* Autostart
+** Autostart
 #+begin_src haskell
 myStartupHook :: X ()                                                                                                                         
 myStartupHook = do                                                                                                                            
@@ -29,7 +35,7 @@ myStartupHook = do
   spawnOnce "wal -R &"   
 #+end_src
 
-* Constants
+** Constants
 #+begin_src haskell
   myTerm = "kitty"                
   myModMask = mod4Mask            
@@ -37,7 +43,7 @@ myStartupHook = do
   myNormalBorderColor = "#222222" 
   myFocusedBorderColor = "#DE5e5e"
 #+end_src
-* Manage Hook
+** Manage Hook
 #+begin_src haskell                                                                                                                                              
 myManageHook :: ManageHook                                                                                                                    
 myManageHook =                                                                                                                                
@@ -46,7 +52,7 @@ myManageHook =
       isDialog --> doFloat                                                                                                                    
     ]
 #+end_src
-* Layout
+** Layout
 #+begin_src haskell
 myLayout = (tiled ||| Mirror tiled ||| Full)                                                                                                  
   where                                                                                                                                       
@@ -55,7 +61,7 @@ myLayout = (tiled ||| Mirror tiled ||| Full)
     ratio = 1 / 2                                                                                                                             
     delta = 3 / 100                                                                                                                           
 #+end_src
-* XMobarPP
+** XMobarPP
 #+begin_src haskell
 myXmobarPP :: PP                                                                                                                              
 myXmobarPP =                                                                                                                                  
@@ -85,49 +91,45 @@ myXmobarPP =
     grey = xmobarColor "#8e8e8e" ""                                                                                                           
     walred = xmobarColor "#de5e5e" ""                                                                                                         
 #+end_src
-* Exit confirm
+** Exit confirm
 #+begin_src haskell
-myXPConfig =                                                                                                                                  
-  def                                                                                                                                         
-    { position = Top,                                                                                                                         
-      alwaysHighlight = True,                                                                                                                 
-      promptBorderWidth = 0,                                                                                                                  
-      font = "Terminus"                                                                                                                       
-    }                                                                                                                                         
+  quitWithWarning :: X ()
+  quitWithWarning = do
+    let m = "confirm quit"
+    s <- dmenu [m]
+    when (m == s) (io exitSuccess)
 #+end_src
-
-* Main
+** Main
 #+begin_src haskell                                                                                                                                             
-main :: IO ()                                                                                                                                 
-main = do                                                                                                                                     
-  xmonad                                                                                                                                      
-    . ewmhFullscreen                                                                                                                          
-    . ewmh                                                                                                                                    
-    . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey                              
-    $ myConfig                                                                                                                                
+  main :: IO ()
+  main = do
+    xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar/xmobar.hs"
+    xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar/xmobar.hs"
+    xmonad
+      $ docks
+      $ ewmh
+      $ withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+      $ defaults
 #+end_src
-
-* My Config
+** My Config
 #+begin_src haskell
-myConfig =                                                                                                                                    
-  def                                                                                                                                         
-    { terminal = myTerm,                                                                                                                      
-      modMask = myModMask,                                                                                                                    
-      borderWidth = myBorderWidth,                                                                                                            
-      normalBorderColor = myNormalBorderColor,                                                                                                
-      focusedBorderColor = myFocusedBorderColor,                                                                                              
-      manageHook = myManageHook,                                                                                                              
-      layoutHook = myLayout,                                                                                                                  
-      startupHook = myStartupHook                                                                                                             
-    }                                                                                                                                         
-    `additionalKeysP` [ ("M-f", spawn "firefox"),                                                                                             
-                        --("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess)),                                                        
-                        ("M-S-l", spawn "slock"),                                                                                             
-                        ("M-S-e", spawn "emacs"),                                                                                             
-                        ("M-S-p", spawn "spotify"),                                                                                           
-                        ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),                                                                 
-                        ("M-S-v", spawn "code"),                                                                                              
-                        ("M-S-t", spawn "thunar")                                                                                             
-                      ]                                                                                                                       
-                                                                                                                                              
+  defaults = def
+    { terminal = myTerm
+    , modMask = myModMask
+    , borderWidth = myBorderWidth
+    , normalBorderColor = myNormalBorderColor
+    , focusedBorderColor = myFocusedBorderColor
+    , manageHook = myManageHook
+    , layoutHook = myLayout
+    , startupHook = myStartupHook
+    } `additionalKeysP`
+    [ ("M-f", spawn "firefox")
+    , ("M-S-q", quitWithWarning)
+    , ("M-S-l", spawn "slock")
+    , ("M-S-e", spawn "emacs")
+    , ("M-S-p", spawn "spotify")
+    , ("M-S-s", spawn "maim -s /home/ame/screenshots.png")
+    , ("M-S-v", spawn "code")
+    , ("M-S-t", spawn "thunar")
+    ]
 #+end_src

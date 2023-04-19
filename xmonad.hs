@@ -1,16 +1,24 @@
-import System.Exit                                                                                                                            
-import XMonad                                                                                                                                 
-import XMonad.Hooks.DynamicLog                                                                                                                
-import XMonad.Hooks.EwmhDesktops                                                                                                              
-import XMonad.Hooks.ManageHelpers                                                                                                             
-import XMonad.Hooks.StatusBar                                                                                                                 
-import XMonad.Hooks.StatusBar.PP                                                                                                              
-import XMonad.ManageHook                                                                                                                      
-import XMonad.Prompt                                                                                                                          
-import XMonad.Prompt.ConfirmPrompt                                                                                                            
-import XMonad.Util.EZConfig                                                                                                                   
+import System.Exit
+import Control.Monad
+
+import XMonad
+
+import XMonad.ManageHook
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
+
+import XMonad.Prompt
+import XMonad.Prompt.ConfirmPrompt
+
+import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Run
+import XMonad.Util.Dmenu
 
 myStartupHook :: X ()                                                                                                                         
 myStartupHook = do                                                                                                                            
@@ -65,39 +73,38 @@ myXmobarPP =
     grey = xmobarColor "#8e8e8e" ""                                                                                                           
     walred = xmobarColor "#de5e5e" ""
 
-myXPConfig =                                                                                                                                  
-  def                                                                                                                                         
-    { position = Top,                                                                                                                         
-      alwaysHighlight = True,                                                                                                                 
-      promptBorderWidth = 0,                                                                                                                  
-      font = "Terminus"                                                                                                                       
-    }
+quitWithWarning :: X ()
+quitWithWarning = do
+  let m = "confirm quit"
+  s <- dmenu [m]
+  when (m == s) (io exitSuccess)
 
-main :: IO ()                                                                                                                                 
-main = do                                                                                                                                     
-  xmonad                                                                                                                                      
-    . ewmhFullscreen                                                                                                                          
-    . ewmh                                                                                                                                    
-    . withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey                              
-    $ myConfig
+main :: IO ()
+main = do
+  xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar/xmobar.hs"
+  xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar/xmobar.hs"
+  xmonad
+    $ docks
+    $ ewmh
+    $ withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+    $ defaults
 
-myConfig =                                                                                                                                    
-  def                                                                                                                                         
-    { terminal = myTerm,                                                                                                                      
-      modMask = myModMask,                                                                                                                    
-      borderWidth = myBorderWidth,                                                                                                            
-      normalBorderColor = myNormalBorderColor,                                                                                                
-      focusedBorderColor = myFocusedBorderColor,                                                                                              
-      manageHook = myManageHook,                                                                                                              
-      layoutHook = myLayout,                                                                                                                  
-      startupHook = myStartupHook                                                                                                             
-    }                                                                                                                                         
-    `additionalKeysP` [ ("M-f", spawn "firefox"),                                                                                             
-                        --("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess)),                                                        
-                        ("M-S-l", spawn "slock"),                                                                                             
-                        ("M-S-e", spawn "emacs"),                                                                                             
-                        ("M-S-p", spawn "spotify"),                                                                                           
-                        ("M-S-s", spawn "maim -s /home/ame/screenshots.png"),                                                                 
-                        ("M-S-v", spawn "code"),                                                                                              
-                        ("M-S-t", spawn "thunar")                                                                                             
-                      ]
+defaults = def
+  { terminal = myTerm
+  , modMask = myModMask
+  , borderWidth = myBorderWidth
+  , normalBorderColor = myNormalBorderColor
+  , focusedBorderColor = myFocusedBorderColor
+  , manageHook = myManageHook
+  , layoutHook = myLayout
+  , startupHook = myStartupHook
+  } `additionalKeysP`
+  [ ("M-f", spawn "firefox")
+  , ("M-S-q", quitWithWarning)
+  , ("M-S-l", spawn "slock")
+  , ("M-S-e", spawn "emacs")
+  , ("M-S-p", spawn "spotify")
+  , ("M-S-s", spawn "maim -s /home/ame/screenshots.png")
+  , ("M-S-v", spawn "code")
+  , ("M-S-t", spawn "thunar")
+  ]
