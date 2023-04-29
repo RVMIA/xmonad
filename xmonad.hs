@@ -13,6 +13,8 @@ import XMonad.Hooks.StatusBar.PP
 
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
+import XMonad.Prompt.Man
+import XMonad.Prompt.XMonad
 
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
@@ -86,6 +88,7 @@ main = do
   xmonad
     $ docks
     $ ewmh
+    $ ewmhFullscreen
     $ withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
     $ defaults
 
@@ -102,7 +105,7 @@ defaults = def
   [ ("M-f", spawn "firefox")
   , ("M-S-q", quitWithWarning)
   , ("M-S-l", spawn "slock")
-  , ("M-S-e", spawn "emacs")
+  , ("M-S-e", spawn "emacsclient -c")
   , ("M-S-p", spawn "spotify")
   , ("M-S-s", spawn "maim -s /home/ame/screenshots.png")
   , ("M-S-v", spawn "code")
