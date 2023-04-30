@@ -4,31 +4,35 @@
 ** Imports
 Modules to import.
 #+begin_src haskell
-  import System.Exit
-  import System.Posix.Process
-  import Control.Monad
-  import Graphics.X11.ExtraTypes.XF86
+   import System.Exit
+   import System.Posix.Process
+   import Control.Monad
+   import Graphics.X11.ExtraTypes.XF86
 
-  import XMonad
+   import XMonad
 
-  import XMonad.ManageHook
-  import XMonad.Hooks.DynamicLog
-  import XMonad.Hooks.EwmhDesktops
-  import XMonad.Hooks.ManageHelpers
-  import XMonad.Hooks.ManageDocks
-  import XMonad.Hooks.StatusBar
-  import XMonad.Hooks.StatusBar.PP
+   import XMonad.ManageHook
+   import XMonad.Hooks.DynamicLog
+   import XMonad.Hooks.EwmhDesktops
+   import XMonad.Hooks.ManageHelpers
+   import XMonad.Hooks.ManageDocks
+   import XMonad.Hooks.StatusBar
+   import XMonad.Hooks.StatusBar.PP
 
-  import XMonad.Prompt
-  import XMonad.Prompt.ConfirmPrompt
-  import XMonad.Prompt.Man
-  import XMonad.Prompt.XMonad
+   import XMonad.Prompt
+   import XMonad.Prompt.ConfirmPrompt
+   import XMonad.Prompt.Man
+   import XMonad.Prompt.XMonad
 
-  import XMonad.Util.EZConfig
-  import XMonad.Util.Loggers
-  import XMonad.Util.SpawnOnce
-  import XMonad.Util.Run
-  import XMonad.Util.Dmenu
+   import XMonad.Util.EZConfig
+   import XMonad.Util.Loggers
+   import XMonad.Util.SpawnOnce
+   import XMonad.Util.Run
+   import XMonad.Util.Dmenu
+
+   import XMonad.Actions.NoBorders
+   import XMonad.Layout.MultiToggle
+   import XMonad.Layout.MultiToggle.Instances
 #+end_src
 
 ** Autostart
@@ -136,6 +140,7 @@ myXmobarPP =
     , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
     , ((myModMask .|. shiftMask, xK_v), spawn "code")
     , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
+    , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
     , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
     , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
     , ((0, xF86XK_AudioNext) , spawn "playerctl next")

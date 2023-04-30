@@ -24,6 +24,10 @@ import XMonad.Util.SpawnOnce
 import XMonad.Util.Run
 import XMonad.Util.Dmenu
 
+import XMonad.Actions.NoBorders
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
+
 myStartupHook :: X ()                                                                                                                         
 myStartupHook = do                                                                                                                            
   spawnOnce "nitrogen --restore &"                                                                                            
@@ -112,6 +116,7 @@ defaults = def
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
   , ((myModMask .|. shiftMask, xK_v), spawn "code")
   , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
+  , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
   , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
   , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
   , ((0, xF86XK_AudioNext) , spawn "playerctl next")

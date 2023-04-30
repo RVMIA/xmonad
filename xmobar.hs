@@ -11,7 +11,7 @@ Config { font         = "Terminus"
                         , Run Memory ["-t","Mem: <usedratio>%"] 50
                         , Run Date "%_A %D %r" "date" 10
 			, Run Alsa "default" "Master" [ "--template", "<volumestatus>", "--suffix", "True", "--", "--on", "" ]
-                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 100
+                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 10
                         , Run XMonadLog
                         ]
        , sepChar      = "%"
