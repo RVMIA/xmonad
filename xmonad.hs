@@ -1,5 +1,7 @@
 import System.Exit
+import System.Posix.Process
 import Control.Monad
+import Graphics.X11.ExtraTypes.XF86
 
 import XMonad
 
@@ -83,8 +85,8 @@ quitWithWarning = do
 
 main :: IO ()
 main = do
-  xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar/xmobar.hs"
-  xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar/xmobar.hs"
+  xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar.hs"
+  xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar.hs"
   xmonad
     $ docks
     $ ewmh
@@ -101,13 +103,16 @@ defaults = def
   , manageHook = myManageHook
   , layoutHook = myLayout
   , startupHook = myStartupHook
-  } `additionalKeysP`
-  [ ("M-f", spawn "firefox")
-  , ("M-S-q", quitWithWarning)
-  , ("M-S-l", spawn "slock")
-  , ("M-S-e", spawn "emacsclient -c")
-  , ("M-S-p", spawn "spotify")
-  , ("M-S-s", spawn "maim -s /home/ame/screenshots.png")
-  , ("M-S-v", spawn "code")
-  , ("M-S-t", spawn "thunar")
+  } `additionalKeys`
+  [ ((myModMask, xK_f), spawn "firefox")
+  , ((myModMask .|. shiftMask, xK_q), quitWithWarning)
+  , ((myModMask .|. shiftMask, xK_l), spawn "slock")
+  , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
+  , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
+  , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
+  , ((myModMask .|. shiftMask, xK_v), spawn "code")
+  , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
+  , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
+  , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
+  , ((0, xF86XK_AudioNext) , spawn "playerctl next")
   ]
