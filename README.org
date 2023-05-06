@@ -4,43 +4,48 @@
 ** Imports
 Modules to import.
 #+begin_src haskell
-   import System.Exit
-   import System.Posix.Process
-   import Control.Monad
-   import Graphics.X11.ExtraTypes.XF86
+  import System.Exit
+  import System.Posix.Process
+  import Control.Monad
+  import Graphics.X11.ExtraTypes.XF86
 
-   import XMonad
+  import XMonad
 
-   import XMonad.ManageHook
-   import XMonad.Hooks.DynamicLog
-   import XMonad.Hooks.EwmhDesktops
-   import XMonad.Hooks.ManageHelpers
-   import XMonad.Hooks.ManageDocks
-   import XMonad.Hooks.StatusBar
-   import XMonad.Hooks.StatusBar.PP
 
-   import XMonad.Prompt
-   import XMonad.Prompt.ConfirmPrompt
-   import XMonad.Prompt.Man
-   import XMonad.Prompt.XMonad
+  import XMonad.ManageHook
+  import XMonad.Hooks.DynamicLog
+  import XMonad.Hooks.EwmhDesktops
+  import XMonad.Hooks.ManageHelpers
+  import XMonad.Hooks.ManageDocks
+  import XMonad.Hooks.StatusBar
+  import XMonad.Hooks.StatusBar.PP
 
-   import XMonad.Util.EZConfig
-   import XMonad.Util.Loggers
-   import XMonad.Util.SpawnOnce
-   import XMonad.Util.Run
-   import XMonad.Util.Dmenu
+  import XMonad.Prompt
+  import XMonad.Prompt.ConfirmPrompt
+  import XMonad.Prompt.Man
+  import XMonad.Prompt.XMonad
 
-   import XMonad.Actions.NoBorders
-   import XMonad.Layout.MultiToggle
-   import XMonad.Layout.MultiToggle.Instances
+  import XMonad.Util.EZConfig
+  import XMonad.Util.Loggers
+  import XMonad.Util.SpawnOnce
+  import XMonad.Util.Run
+  import XMonad.Util.Dmenu
+
+  import XMonad.Actions.NoBorders
+
+  import XMonad.Layout.SimpleFloat
+  import XMonad.Layout.MultiToggle
+  import XMonad.Layout.MultiToggle.Instances
 #+end_src
 
 ** Autostart
 #+begin_src haskell
-myStartupHook :: X ()                                                                                                                         
-myStartupHook = do                                                                                                                            
-  spawnOnce "nitrogen --restore &"                                                                                            
-  spawnOnce "wal -R &"   
+  myStartupHook :: X ()
+  myStartupHook = do
+    spawnOnce "nitrogen --restore &"
+    spawnOnce "wal -R &"
+   -- spawnOnce "picom -b"
+    spawnOnce "bash ~/.config/screenlayout.sh"
 #+end_src
 
 ** Constants
@@ -62,12 +67,12 @@ myManageHook =
 #+end_src
 ** Layout
 #+begin_src haskell
-myLayout = (tiled ||| Mirror tiled ||| Full)                                                                                                  
-  where                                                                                                                                       
-    tiled = Tall nmaster delta ratio                                                                                                          
-    nmaster = 1                                                                                                                               
-    ratio = 1 / 2                                                                                                                             
-    delta = 3 / 100                                                                                                                           
+  myLayout = (tiled ||| Mirror tiled ||| Full)
+    where                                                                                  
+      tiled = Tall nmaster delta ratio
+      nmaster = 1
+      ratio = 1 / 2
+      delta = 3 / 100
 #+end_src
 ** XMobarPP
 #+begin_src haskell
@@ -139,7 +144,7 @@ myXmobarPP =
     , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
     , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
     , ((myModMask .|. shiftMask, xK_v), spawn "code")
-    , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
+    , ((myModMask .|. shiftMask, xK_t), spawn "nemo")
     , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
     , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
     , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")

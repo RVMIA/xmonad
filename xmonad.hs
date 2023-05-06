@@ -5,6 +5,7 @@ import Graphics.X11.ExtraTypes.XF86
 
 import XMonad
 
+
 import XMonad.ManageHook
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -25,13 +26,17 @@ import XMonad.Util.Run
 import XMonad.Util.Dmenu
 
 import XMonad.Actions.NoBorders
+
+import XMonad.Layout.SimpleFloat
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
-myStartupHook :: X ()                                                                                                                         
-myStartupHook = do                                                                                                                            
-  spawnOnce "nitrogen --restore &"                                                                                            
+myStartupHook :: X ()
+myStartupHook = do
+  spawnOnce "nitrogen --restore &"
   spawnOnce "wal -R &"
+ -- spawnOnce "picom -b"
+  spawnOnce "bash ~/.config/screenlayout.sh"
 
 myTerm = "kitty"                
 myModMask = mod4Mask            
@@ -46,11 +51,11 @@ myManageHook =
       isDialog --> doFloat                                                                                                                    
     ]
 
-myLayout = (tiled ||| Mirror tiled ||| Full)                                                                                                  
-  where                                                                                                                                       
-    tiled = Tall nmaster delta ratio                                                                                                          
-    nmaster = 1                                                                                                                               
-    ratio = 1 / 2                                                                                                                             
+myLayout = (tiled ||| Mirror tiled ||| Full)
+  where                                                                                  
+    tiled = Tall nmaster delta ratio
+    nmaster = 1
+    ratio = 1 / 2
     delta = 3 / 100
 
 myXmobarPP :: PP                                                                                                                              
@@ -115,7 +120,7 @@ defaults = def
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
   , ((myModMask .|. shiftMask, xK_v), spawn "code")
-  , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
+  , ((myModMask .|. shiftMask, xK_t), spawn "nemo")
   , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
   , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
   , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
