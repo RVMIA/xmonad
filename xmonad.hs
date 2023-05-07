@@ -33,16 +33,17 @@ import XMonad.Layout.MultiToggle.Instances
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "nitrogen --restore &"
-  spawnOnce "wal -R &"
- -- spawnOnce "picom -b"
   spawnOnce "bash ~/.config/screenlayout.sh"
+  -- spawnOnce "picom -b"
+  spawnOnce "wal -R &"
+  --spawnOnce "nitrogen --restore &"
 
+myColor = "#5e6f50"
 myTerm = "kitty"                
 myModMask = mod4Mask            
 myBorderWidth = 3               
 myNormalBorderColor = "#222222" 
-myFocusedBorderColor = "#DE5e5e"
+myFocusedBorderColor = myColor
 
 myManageHook :: ManageHook                                                                                                                    
 myManageHook =                                                                                                                                
@@ -61,7 +62,7 @@ myLayout = (tiled ||| Mirror tiled ||| Full)
 myXmobarPP :: PP                                                                                                                              
 myXmobarPP =                                                                                                                                  
   def                                                                                                                                         
-    { ppSep = walred " | ",                                                                                                                   
+    { ppSep = green " | ",                                                                                                                   
       ppTitleSanitize = xmobarStrip,                                                                                                          
       ppCurrent = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2,                                                                               
       ppHidden = white . wrap " " "",                                                                                                         
@@ -71,20 +72,21 @@ myXmobarPP =
       ppExtras = [logTitles formatFocused formatUnfocused]                                                                                    
     }                                                                                                                                         
   where                                                                                                                                       
-    formatFocused = wrap (white "[") (white "]") . walred . ppWindow                                                                          
+    formatFocused = wrap (white "[") (white "]") . green . ppWindow
     formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow                                                                    
     ppWindow :: String -> String                                                                                                              
     ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30                                                              
-                                                                                                                                              
-    blue, lowWhite, magenta, red, white, yellow, walred, grey :: String -> String                                                             
+
+    blue, lowWhite, magenta, red, white, yellow, wal, grey, green :: String -> String                                                             
     magenta = xmobarColor "#ff79c6" ""                                                                                                        
     blue = xmobarColor "#bd93f9" ""                                                                                                           
     white = xmobarColor "#f8f8f2" ""                                                                                                          
     yellow = xmobarColor "#f1fa8c" ""                                                                                                         
     red = xmobarColor "#ff5555" ""                                                                                                            
     lowWhite = xmobarColor "#bbbbbb" ""                                                                                                       
-    grey = xmobarColor "#8e8e8e" ""                                                                                                           
-    walred = xmobarColor "#de5e5e" ""
+    grey = xmobarColor "#8e8e8e" ""
+    green = xmobarColor "#8ba37d" "" 
+    wal = xmobarColor myColor ""
 
 quitWithWarning :: X ()
 quitWithWarning = do

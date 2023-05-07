@@ -1,12 +1,12 @@
-Config { font         = "Terminus"
-       , border       = BottomBM 4
-       , borderColor  = "#DE5E5E"
+Config { font         = "Hack Nerd Font Propo"
+       , border       = BottomBM 0
+       , borderColor  = "#8ba37d"
        , bgColor      = "black"
        , fgColor      = "grey"
        , position     = Top L 
        , lowerOnStart = True
-       , commands     = [ Run Weather "KDFW" ["-t", "Richardson : <tempF>°", "-L", "50", "-H", "90", "--normal", "grey", "--high", "#de5e5e", "--low", "lightblue"] 36000
-                        , Run Network "enp10s0f3u1u2" [ "-L", "0", "-H", "150", "--normal", "grey", "--high", "#de5e5e"] 10
+       , commands     = [ Run Weather "KDFW" ["-t", "Richardson : <tempF>°", "-L", "50", "-H", "90", "--normal", "grey", "--high", "#8ba37d", "--low", "lightblue"] 36000
+                        , Run Network "enp10s0f3u1u2" [ "-L", "0", "-H", "150", "--normal", "grey", "--high", "#8ba37d"] 10
                         , Run MultiCpu ["autosystem", "autobar"] 50
                         , Run Memory ["-t","Mem: <usedratio>%"] 50
                         , Run Date "%_A %D %r" "date" 10
@@ -16,6 +16,6 @@ Config { font         = "Terminus"
                         ]
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = "%XMonadLog% }{ %playing% | %multicpu% | %memory% | %enp10s0f3u1u2% | %KDFW%F | <fc=#DE5E5E>%date%</fc> "
+       , template     = "%XMonadLog% }{ %playing% | %multicpu% | %memory% | %enp10s0f3u1u2% | %KDFW%F | <fc=#8ba37d>%date%</fc> "
        
 }
