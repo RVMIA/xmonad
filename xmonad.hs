@@ -34,22 +34,22 @@ import XMonad.Layout.MultiToggle.Instances
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "bash ~/.config/screenlayout.sh"
-  -- spawnOnce "picom -b"
   spawnOnce "wal -R &"
-  --spawnOnce "nitrogen --restore &"
 
 myColor = "#5e6f50"
 myTerm = "kitty"                
 myModMask = mod4Mask            
 myBorderWidth = 3               
-myNormalBorderColor = "#222222" 
+myNormalBorderColor = "#1d2021" 
 myFocusedBorderColor = myColor
 
-myManageHook :: ManageHook                                                                                                                    
-myManageHook =                                                                                                                                
-  composeAll                                                                                                                                  
-    [ className =? "Gimp" --> doFloat,                                                                                                        
-      isDialog --> doFloat                                                                                                                    
+myManageHook :: ManageHook                                                 
+myManageHook =                                                   
+  composeAll                         
+    [ className =? "Gimp" --> doFloat,
+      isDialog --> doFloat,
+      className =? "Spotify" --> doShift "9",
+      className =? "discord" --> doShift "9"
     ]
 
 myLayout = (tiled ||| Mirror tiled ||| Full)
@@ -59,6 +59,7 @@ myLayout = (tiled ||| Mirror tiled ||| Full)
     ratio = 1 / 2
     delta = 3 / 100
 
+mySB = statusBarProp "xmobar ~/.config/xmonad/xmobar.hs" (pure myXmobarPP)
 myXmobarPP :: PP                                                                                                                              
 myXmobarPP =                                                                                                                                  
   def                                                                                                                                         
@@ -75,7 +76,7 @@ myXmobarPP =
     formatFocused = wrap (white "[") (white "]") . green . ppWindow
     formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow                                                                    
     ppWindow :: String -> String                                                                                                              
-    ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30                                                              
+    ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 10                                                              
 
     blue, lowWhite, magenta, red, white, yellow, wal, grey, green :: String -> String                                                             
     magenta = xmobarColor "#ff79c6" ""                                                                                                        
@@ -99,10 +100,10 @@ main = do
   xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar.hs"
   xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar.hs"
   xmonad
-    $ docks
-    $ ewmh
-    $ ewmhFullscreen
-    $ withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+    . docks
+    . ewmh
+    . ewmhFullscreen
+    . withEasySB mySB defToggleStrutsKey
     $ defaults
 
 defaults = def
@@ -120,9 +121,9 @@ defaults = def
   , ((myModMask .|. shiftMask, xK_l), spawn "slock")
   , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
+  , ((myModMask .|. shiftMask, xK_d), spawn "discord")
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
-  , ((myModMask .|. shiftMask, xK_v), spawn "code")
-  , ((myModMask .|. shiftMask, xK_t), spawn "nemo")
+  , ((myModMask .|. shiftMask, xK_t), spawn "xfe")
   , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
   , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
   , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")

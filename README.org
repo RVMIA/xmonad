@@ -1,7 +1,6 @@
 #+TITLE: XMonad Config
 #+PROPERTY: header-args :tangle xmonad.hs
-* XMonad Config
-** Imports
+* Imports
 Modules to import.
 #+begin_src haskell
   import System.Exit
@@ -37,36 +36,35 @@ Modules to import.
   import XMonad.Layout.MultiToggle
   import XMonad.Layout.MultiToggle.Instances
 #+end_src
-
-** Autostart
+* Autostart
 #+begin_src haskell
   myStartupHook :: X ()
   myStartupHook = do
     spawnOnce "bash ~/.config/screenlayout.sh"
-    -- spawnOnce "picom -b"
     spawnOnce "wal -R &"
-    --spawnOnce "nitrogen --restore &"
 #+end_src
 
-** Constants
+* Constants
 #+begin_src haskell
   myColor = "#5e6f50"
   myTerm = "kitty"                
   myModMask = mod4Mask            
   myBorderWidth = 3               
-  myNormalBorderColor = "#222222" 
+  myNormalBorderColor = "#1d2021" 
   myFocusedBorderColor = myColor
 #+end_src
-** Manage Hook
+* Manage Hook
 #+begin_src haskell                                                                                                                                              
-myManageHook :: ManageHook                                                                                                                    
-myManageHook =                                                                                                                                
-  composeAll                                                                                                                                  
-    [ className =? "Gimp" --> doFloat,                                                                                                        
-      isDialog --> doFloat                                                                                                                    
-    ]
+  myManageHook :: ManageHook                                                 
+  myManageHook =                                                   
+    composeAll                         
+      [ className =? "Gimp" --> doFloat,
+	isDialog --> doFloat,
+	className =? "Spotify" --> doShift "9",
+      	className =? "discord" --> doShift "9"
+      ]
 #+end_src
-** Layout
+* Layout
 #+begin_src haskell
   myLayout = (tiled ||| Mirror tiled ||| Full)
     where                                                                                  
@@ -75,8 +73,9 @@ myManageHook =
       ratio = 1 / 2
       delta = 3 / 100
 #+end_src
-** XMobarPP
+* XMobar
 #+begin_src haskell
+  mySB = statusBarProp "xmobar ~/.config/xmonad/xmobar.hs" (pure myXmobarPP)
   myXmobarPP :: PP                                                                                                                              
   myXmobarPP =                                                                                                                                  
     def                                                                                                                                         
@@ -93,8 +92,8 @@ myManageHook =
       formatFocused = wrap (white "[") (white "]") . green . ppWindow
       formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow                                                                    
       ppWindow :: String -> String                                                                                                              
-      ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30                                                              
-                                                                                                                                              
+      ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 10                                                              
+
       blue, lowWhite, magenta, red, white, yellow, wal, grey, green :: String -> String                                                             
       magenta = xmobarColor "#ff79c6" ""                                                                                                        
       blue = xmobarColor "#bd93f9" ""                                                                                                           
@@ -106,7 +105,7 @@ myManageHook =
       green = xmobarColor "#8ba37d" "" 
       wal = xmobarColor myColor ""                                                                                                         
 #+end_src
-** Exit confirm
+* Exit confirm
 #+begin_src haskell
   quitWithWarning :: X ()
   quitWithWarning = do
@@ -114,20 +113,20 @@ myManageHook =
     s <- dmenu [m]
     when (m == s) (io exitSuccess)
 #+end_src
-** Main
-#+begin_src haskell                                                                                                                                             
+* Main
+#+begin_src haskell
   main :: IO ()
   main = do
     xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar.hs"
     xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar.hs"
     xmonad
-      $ docks
-      $ ewmh
-      $ ewmhFullscreen
-      $ withEasySB (statusBarProp "xmobar ~/.config/xmonad/xmobar/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+      . docks
+      . ewmh
+      . ewmhFullscreen
+      . withEasySB mySB defToggleStrutsKey
       $ defaults
 #+end_src
-** My Config
+* My Config
 #+begin_src haskell
   defaults = def
     { terminal = myTerm
@@ -144,9 +143,9 @@ myManageHook =
     , ((myModMask .|. shiftMask, xK_l), spawn "slock")
     , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
     , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
+    , ((myModMask .|. shiftMask, xK_d), spawn "discord")
     , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
-    , ((myModMask .|. shiftMask, xK_v), spawn "code")
-    , ((myModMask .|. shiftMask, xK_t), spawn "nemo")
+    , ((myModMask .|. shiftMask, xK_t), spawn "xfe")
     , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
     , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
     , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
