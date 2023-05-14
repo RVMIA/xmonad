@@ -107,6 +107,7 @@ main = do
 
 defaults = def
   { modMask = myModMask
+  , terminal = "kitty"
   , borderWidth = myBorderWidth
   , normalBorderColor = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
@@ -118,7 +119,7 @@ defaults = def
   , ((myModMask .|. shiftMask, xK_q), quitWithWarning)
   , ((myModMask .|. shiftMask, xK_l), spawn "slock")
   , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
-  , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
+  -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
   , ((myModMask .|. shiftMask, xK_d), spawn "discord")
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots.png")
