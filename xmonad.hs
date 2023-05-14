@@ -37,7 +37,6 @@ myStartupHook = do
   spawnOnce "wal -R &"
 
 myColor = "#5e6f50"
-myTerm = "kitty"                
 myModMask = mod4Mask            
 myBorderWidth = 3               
 myNormalBorderColor = "#1d2021" 
@@ -107,8 +106,7 @@ main = do
     $ defaults
 
 defaults = def
-  { terminal = myTerm
-  , modMask = myModMask
+  { modMask = myModMask
   , borderWidth = myBorderWidth
   , normalBorderColor = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
@@ -120,10 +118,11 @@ defaults = def
   , ((myModMask .|. shiftMask, xK_q), quitWithWarning)
   , ((myModMask .|. shiftMask, xK_l), spawn "slock")
   , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
+  , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
   , ((myModMask .|. shiftMask, xK_d), spawn "discord")
-  , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/screenshots.png")
-  , ((myModMask .|. shiftMask, xK_t), spawn "xfe")
+  , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots.png")
+  , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
   , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
   , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
   , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
