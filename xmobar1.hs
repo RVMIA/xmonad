@@ -4,7 +4,7 @@ Config { font         = "Terminus"
        , borderColor  = "#5e6f50"
        , bgColor      = "#1d2021"
        , fgColor      = "grey"
-       , position     = TopW L 95
+       , position     = TopW L 100
        , lowerOnStart = True
        , commands     = [ Run DynNetwork [ "--template" , "<tx>kB/s | <rx>kB/s"
                                          , "--Low"      , "1000"       -- units: kB/s
