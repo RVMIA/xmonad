@@ -38,12 +38,10 @@ Modules to import.
 #+end_src
 * Autostart
 #+begin_src haskell
-  myStartupHook :: X ()
-  myStartupHook = do
-    spawnOnce "bash ~/.config/screenlayout.sh"
-    spawnOnce "wal -R &"
+myStartupHook :: X ()
+myStartupHook = do
+  spawnOnce "tint2"
 #+end_src
-
 * Constants
 #+begin_src haskell
     myColor = "#5e6f50"
@@ -74,37 +72,38 @@ Modules to import.
 #+end_src
 * XMobar
 #+begin_src haskell
-  mySB = statusBarProp "xmobar ~/.config/xmonad/xmobar.hs" (pure myXmobarPP)
-  myXmobarPP :: PP                                                                                                                              
-  myXmobarPP =                                                                                                                                  
-    def                                                                                                                                         
-      { ppSep = green " | ",                                                                                                                   
-	ppTitleSanitize = xmobarStrip,                                                                                                          
-	ppCurrent = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2,                                                                               
-	ppHidden = white . wrap " " "",                                                                                                         
-	ppHiddenNoWindows = lowWhite . wrap " " "",                                                                                             
-	ppUrgent = red . wrap (yellow "!") (yellow "!"),                                                                                        
-	ppOrder = \[ws, l, _, wins] -> [ws, l, wins],                                                                                           
-	ppExtras = [logTitles formatFocused formatUnfocused]                                                                                    
-      }                                                                                                                                         
-    where                                                                                                                                       
-      formatFocused = wrap (white "[") (white "]") . green . ppWindow
-      formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow                                                                    
-      ppWindow :: String -> String                                                                                                              
-      ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 10                                                              
+    xmobar1 = statusBarProp "xmobar -x 0 $HOME/.config/xmonad/xmobar1.hs" (pure myXmobarPP)
+    xmobar2 = statusBarProp "xmobar -x 1 $HOME/.config/xmonad/xmobar2.hs" (pure myXmobarPP)
+    myXmobarPP :: PP                                                                                                                              
+    myXmobarPP =                                                                                                                                  
+      def                                                                                                                                         
+	{ ppSep = green " | ",                                                                                                                   
+	  ppTitleSanitize = xmobarStrip,                                                                                                          
+	  ppCurrent = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2,                                                                               
+	  ppHidden = white . wrap " " "",                                                                                                         
+	  ppHiddenNoWindows = lowWhite . wrap " " "",                                                                                             
+	  ppUrgent = red . wrap (yellow "!") (yellow "!"),                                                                                        
+	  ppOrder = \[ws, l, _, wins] -> [ws, l, wins],                                                                                           
+	  ppExtras = [logTitles formatFocused formatUnfocused]                                                                                    
+	}                                                                                                                                         
+      where                                                                                                                                       
+	formatFocused = wrap (white "[") (white "]") . green . ppWindow
+	formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow                                                                    
+	ppWindow :: String -> String                                                                                                              
+	ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 10                                                              
 
-      blue, lowWhite, magenta, red, white, yellow, wal, grey, green :: String -> String                                                             
-      magenta = xmobarColor "#ff79c6" ""                                                                                                        
-      blue = xmobarColor "#bd93f9" ""                                                                                                           
-      white = xmobarColor "#f8f8f2" ""                                                                                                          
-      yellow = xmobarColor "#f1fa8c" ""                                                                                                         
-      red = xmobarColor "#ff5555" ""                                                                                                            
-      lowWhite = xmobarColor "#bbbbbb" ""                                                                                                       
-      grey = xmobarColor "#8e8e8e" ""
-      green = xmobarColor "#8ba37d" "" 
-      wal = xmobarColor myColor ""                                                                                                         
+	blue, lowWhite, magenta, red, white, yellow, wal, grey, green :: String -> String                                                             
+	magenta = xmobarColor "#ff79c6" ""                                                                                                        
+	blue = xmobarColor "#bd93f9" ""                                                                                                           
+	white = xmobarColor "#f8f8f2" ""                                                                                                          
+	yellow = xmobarColor "#f1fa8c" ""                                                                                                         
+	red = xmobarColor "#ff5555" ""                                                                                                            
+	lowWhite = xmobarColor "#bbbbbb" ""                                                                                                       
+	grey = xmobarColor "#8e8e8e" ""
+	green = xmobarColor "#8ba37d" "" 
+	wal = xmobarColor myColor ""                                                                                                         
 #+end_src
-* Exit confirm
+* Exit confirm (Needs Dmenu)
 #+begin_src haskell
   quitWithWarning :: X ()
   quitWithWarning = do
@@ -116,13 +115,11 @@ Modules to import.
 #+begin_src haskell
   main :: IO ()
   main = do
-    xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar.hs"
-    xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar.hs"
     xmonad
-      . docks
-      . ewmh
-      . ewmhFullscreen
-      . withEasySB mySB defToggleStrutsKey
+      $ docks
+      $ ewmh
+      $ ewmhFullscreen
+      $ withEasySB (xmobar1 <> xmobar2) defToggleStrutsKey
       $ defaults
 #+end_src
 * My Config
@@ -134,17 +131,19 @@ Modules to import.
     , normalBorderColor = myNormalBorderColor
     , focusedBorderColor = myFocusedBorderColor
     , manageHook = myManageHook
-    , layoutHook = myLayout
     , startupHook = myStartupHook
+    , layoutHook = myLayout
     } `additionalKeys`
     [ ((myModMask, xK_f), spawn "firefox")
-    , ((myModMask .|. shiftMask, xK_q), quitWithWarning)
+    -- , ((myModMask .|. shiftMask, xK_q), quitWithWarning)  -- NEEDS DMENU
+    , ((myModMask, xK_q), spawn "xmonad --restart")
     , ((myModMask .|. shiftMask, xK_l), spawn "slock")
     , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
     -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
     , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
+    , ((myModMask, xK_p), spawn "dmenu_run")
     , ((myModMask .|. shiftMask, xK_d), spawn "discord")
-    , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots.png")
+    , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
     , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
     , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
     , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")

@@ -4,7 +4,7 @@ Config { font         = "Terminus"
        , borderColor  = "#5e6f50"
        , bgColor      = "#1d2021"
        , fgColor      = "grey"
-       , position     = Top
+       , position     = TopW L 95
        , lowerOnStart = True
        , commands     = [ Run DynNetwork [ "--template" , "<tx>kB/s | <rx>kB/s"
                                          , "--Low"      , "1000"       -- units: kB/s
@@ -23,6 +23,6 @@ Config { font         = "Terminus"
                         ]
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = "%XMonadLog% }{ %playing% | %multicpu% | %memory% | %dynnetwork% | %weather% | <fc=#5e6f50>%date%</fc> "
+       , template     = "%XMonadLog% }{ <fc=#5e6f50>%date%</fc> "
        
 }

@@ -33,8 +33,7 @@ import XMonad.Layout.MultiToggle.Instances
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "bash ~/.config/screenlayout.sh"
-  spawnOnce "wal -R &"
+  spawnOnce "tint2"
 
 myColor = "#5e6f50"
 myModMask = mod4Mask            
@@ -58,7 +57,8 @@ myLayout = (tiled ||| Mirror tiled ||| Full)
     ratio = 1 / 2
     delta = 3 / 100
 
-mySB = statusBarProp "xmobar ~/.config/xmonad/xmobar.hs" (pure myXmobarPP)
+xmobar1 = statusBarProp "xmobar -x 0 $HOME/.config/xmonad/xmobar1.hs" (pure myXmobarPP)
+xmobar2 = statusBarProp "xmobar -x 1 $HOME/.config/xmonad/xmobar2.hs" (pure myXmobarPP)
 myXmobarPP :: PP                                                                                                                              
 myXmobarPP =                                                                                                                                  
   def                                                                                                                                         
@@ -96,13 +96,11 @@ quitWithWarning = do
 
 main :: IO ()
 main = do
-  xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmonad/xmobar.hs"
-  xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmonad/xmobar.hs"
   xmonad
-    . docks
-    . ewmh
-    . ewmhFullscreen
-    . withEasySB mySB defToggleStrutsKey
+    $ docks
+    $ ewmh
+    $ ewmhFullscreen
+    $ withEasySB (xmobar1 <> xmobar2) defToggleStrutsKey
     $ defaults
 
 defaults = def
@@ -112,17 +110,19 @@ defaults = def
   , normalBorderColor = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
   , manageHook = myManageHook
-  , layoutHook = myLayout
   , startupHook = myStartupHook
+  , layoutHook = myLayout
   } `additionalKeys`
   [ ((myModMask, xK_f), spawn "firefox")
-  , ((myModMask .|. shiftMask, xK_q), quitWithWarning)
+  -- , ((myModMask .|. shiftMask, xK_q), quitWithWarning)  -- NEEDS DMENU
+  , ((myModMask, xK_q), spawn "xmonad --restart")
   , ((myModMask .|. shiftMask, xK_l), spawn "slock")
   , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
   -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
+  , ((myModMask, xK_p), spawn "dmenu_run")
   , ((myModMask .|. shiftMask, xK_d), spawn "discord")
-  , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots.png")
+  , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
   , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
   , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
   , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
