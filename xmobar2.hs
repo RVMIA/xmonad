@@ -15,7 +15,7 @@ Config { font         = "Terminus"
                                          ] 10
                         , Run MultiCpu ["autosystem", "autobar"] 50
                         , Run Memory ["-t","<used> Gb", "-d", "1", "--", "--scale", "1024"] 50
-                        , Run Date "%a %m/%d %I:%M" "date" 10
+                        , Run Date "%I:%M" "date" 10
 			, Run Alsa "default" "Master" [ "--template", "<volumestatus>", "--suffix", "True", "--", "--on", "" ]
                         , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/wttr.sh"] "weather" 36000
                         , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 10
@@ -23,6 +23,6 @@ Config { font         = "Terminus"
                         ]
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = "%XMonadLog% }{ %playing% | %multicpu% | %memory% | %dynnetwork% | %weather% | "
+       , template     = "%XMonadLog% }{ %playing% | %multicpu% | %memory% | %dynnetwork% | %weather% | <fc=#5e6f50>%date%</fc> "
        
 }

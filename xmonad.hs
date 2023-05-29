@@ -5,7 +5,6 @@ import Graphics.X11.ExtraTypes.XF86
 
 import XMonad
 
-
 import XMonad.ManageHook
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -31,15 +30,12 @@ import XMonad.Layout.SimpleFloat
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
-myStartupHook :: X ()
-myStartupHook = do
-  spawnOnce "tint2"
-
 myColor = "#5e6f50"
 myModMask = mod4Mask            
 myBorderWidth = 3               
 myNormalBorderColor = "#1d2021" 
 myFocusedBorderColor = myColor
+myTerminal = "kitty"
 
 myManageHook :: ManageHook                                                 
 myManageHook =                                                   
@@ -105,12 +101,11 @@ main = do
 
 defaults = def
   { modMask = myModMask
-  , terminal = "kitty"
+  , terminal = myTerminal
   , borderWidth = myBorderWidth
   , normalBorderColor = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
   , manageHook = myManageHook
-  , startupHook = myStartupHook
   , layoutHook = myLayout
   } `additionalKeys`
   [ ((myModMask, xK_f), spawn "firefox")
@@ -125,6 +120,7 @@ defaults = def
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
   , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
   , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
+  , ((myModMask .|. shiftMask, xK_r), spawn "bash /home/ame/.config/screenlayout.sh")
   , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
   , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
   , ((0, xF86XK_AudioNext) , spawn "playerctl next")
