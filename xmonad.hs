@@ -30,12 +30,15 @@ import XMonad.Layout.SimpleFloat
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
-myColor = "#5e6f50"
+myColor = "#5377b5"
+--myColor = "#5e6f50"
 myModMask = mod4Mask            
 myBorderWidth = 3               
 myNormalBorderColor = "#1d2021" 
 myFocusedBorderColor = myColor
+myBrowser = "librewolf"
 myTerminal = "kitty"
+myFM = "thunar"
 
 myManageHook :: ManageHook                                                 
 myManageHook =                                                   
@@ -58,7 +61,7 @@ xmobar2 = statusBarProp "xmobar -x 1 $HOME/.config/xmonad/xmobar2.hs" (pure myXm
 myXmobarPP :: PP                                                
 myXmobarPP =                                   
   def                                       
-    { ppSep = green " | ",                                             
+    { ppSep = wal " | ",                                             
       ppTitleSanitize = xmobarStrip,                         
       ppCurrent = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2,
       ppHidden = white . wrap " " "",
@@ -69,7 +72,7 @@ myXmobarPP =
       ppExtras = [logTitles formatFocused formatUnfocused]
     }
   where
-    formatFocused = wrap (white "[") (white "]") . green . ppWindow
+    formatFocused = wrap (white "[") (white "]") . wal . ppWindow
     formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . grey . ppWindow
     ppWindow :: String -> String
     ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 10
@@ -108,20 +111,20 @@ defaults = def
   , manageHook = myManageHook
   , layoutHook = myLayout
   } `additionalKeys`
-  [ ((myModMask, xK_f), spawn "firefox")
+  [ ((myModMask, xK_f), spawn myBrowser)
   -- , ((myModMask .|. shiftMask, xK_q), quitWithWarning)  -- NEEDS DMENU
   , ((myModMask, xK_q), spawn "xmonad --restart")
   , ((myModMask .|. shiftMask, xK_l), spawn "slock")
   , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
   -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
-  , ((myModMask, xK_p), spawn "dmenu_run")
+  , ((myModMask, xK_p), spawn "bash /home/ame/.config/wal/dmen.sh")
   , ((myModMask .|. shiftMask, xK_d), spawn "discord")
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
-  , ((myModMask .|. shiftMask, xK_t), spawn "thunar")
+  , ((myModMask .|. shiftMask, xK_t), spawn myFM)
   , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
   , ((myModMask .|. shiftMask, xK_r), spawn "bash /home/ame/.config/screenlayout.sh")
-  , ((0, xF86XK_AudioPlay) , spawn "playerctl play-pause")
-  , ((0, xF86XK_AudioPrev) , spawn "playerctl previous")
+  , ((0, xF86XK_AudioPlay) , spawn "playerctl -p spotify play-pause")
+  , ((0, xF86XK_AudioPrev) , spawn "playerctl  previous")
   , ((0, xF86XK_AudioNext) , spawn "playerctl next")
   ]

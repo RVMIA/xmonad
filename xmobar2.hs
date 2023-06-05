@@ -1,12 +1,15 @@
 Config { font         = "Terminus"
        , textOffset   = 1
        , border       = BottomBM 1
-       , borderColor  = "#5e6f50"
-       , bgColor      = "#1d2021"
+       , borderColor  = "#5377b5"
+       , bgColor      = "#1d2432"
        , fgColor      = "grey"
-       , position     = Top
+       , position     = TopH 23
        , lowerOnStart = True
-       , commands     = [ Run DynNetwork [ "--template" , "<tx>kB/s | <rx>kB/s"
+       , sepChar      = "%"
+       , alignSep     = "}{"
+       , template     = "%XMonadLog% }{  %packages% | %playing% | %multicpu% | RAM: %memory% | %dynnetwork% | %weather% | <fc=#5377b5>%date%</fc> "       
+       , commands     = [ Run DynNetwork [ "--template" , "Up: <tx>kB/s | Down: <rx>kB/s"
                                          , "--Low"      , "1000"       -- units: kB/s
                                          , "--High"     , "5000"       -- units: kB/s
                                          , "--low"      , "darkgreen"
@@ -19,10 +22,9 @@ Config { font         = "Terminus"
 			, Run Alsa "default" "Master" [ "--template", "<volumestatus>", "--suffix", "True", "--", "--on", "" ]
                         , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/wttr.sh"] "weather" 36000
                         , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 10
+			, Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/packages.sh"] "packages" 1000
                         , Run XMonadLog
                         ]
-       , sepChar      = "%"
-       , alignSep     = "}{"
-       , template     = "%XMonadLog% }{ %playing% | %multicpu% | %memory% | %dynnetwork% | %weather% | <fc=#5e6f50>%date%</fc> "
+
        
 }

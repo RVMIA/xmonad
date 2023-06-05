@@ -1,11 +1,14 @@
 Config { font         = "Terminus"
        , textOffset   = 1
        , border       = BottomBM 1
-       , borderColor  = "#5e6f50"
-       , bgColor      = "#1d2021"
+       , borderColor  = "#5377b5"
+       , bgColor      = "#1d2432"
        , fgColor      = "grey"
-       , position     = TopW L 100
+       , position     = TopH 23
        , lowerOnStart = True
+       , sepChar      = "%"
+       , alignSep     = "}{"
+       , template     = "%XMonadLog% }{ | <fc=#5377b5>%date%</fc> "
        , commands     = [ Run DynNetwork [ "--template" , "<tx>kB/s | <rx>kB/s"
                                          , "--Low"      , "1000"       -- units: kB/s
                                          , "--High"     , "5000"       -- units: kB/s
@@ -21,8 +24,4 @@ Config { font         = "Terminus"
                         , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 10
                         , Run XMonadLog
                         ]
-       , sepChar      = "%"
-       , alignSep     = "}{"
-       , template     = "%XMonadLog% }{ <fc=#5e6f50>%date%</fc> "
-       
 }
