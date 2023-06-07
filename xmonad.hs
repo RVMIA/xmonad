@@ -115,7 +115,7 @@ defaults = def
   -- , ((myModMask .|. shiftMask, xK_q), quitWithWarning)  -- NEEDS DMENU
   , ((myModMask, xK_q), spawn "xmonad --restart")
   , ((myModMask .|. shiftMask, xK_l), spawn "slock")
-  , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c")
+  , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c -a emacs")
   -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
   , ((myModMask, xK_p), spawn "bash /home/ame/.config/wal/dmen.sh")
