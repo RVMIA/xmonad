@@ -38,19 +38,21 @@ myNormalBorderColor = "#1d2021"
 myFocusedBorderColor = myColor
 myBrowser = "librewolf"
 myTerminal = "kitty"
+-- myTerminal = "emacsclient -c -a emacs --eval '(multi-vterm)'"
 myFM = "thunar"
 
-myManageHook :: ManageHook                                                 
-myManageHook =                                                   
-  composeAll                         
+myManageHook :: ManageHook						     
+myManageHook =						   
+  composeAll			       
     [ className =? "Gimp" --> doFloat,
       isDialog --> doFloat,
       className =? "Spotify" --> doShift "9",
-      className =? "discord" --> doShift "9"
+      className =? "discord" --> doShift "9",
+      className =? "SpeedCrunch" --> doFloat
     ]
 
 myLayout = (tiled ||| Mirror tiled ||| Full)
-  where                                                                                  
+  where										   
     tiled = Tall nmaster delta ratio
     nmaster = 1
     ratio = 1 / 2
@@ -58,11 +60,11 @@ myLayout = (tiled ||| Mirror tiled ||| Full)
 
 xmobar1 = statusBarProp "xmobar -x 0 $HOME/.config/xmonad/xmobar1.hs" (pure myXmobarPP)
 xmobar2 = statusBarProp "xmobar -x 1 $HOME/.config/xmonad/xmobar2.hs" (pure myXmobarPP)
-myXmobarPP :: PP                                                
-myXmobarPP =                                   
-  def                                       
-    { ppSep = wal " | ",                                             
-      ppTitleSanitize = xmobarStrip,                         
+myXmobarPP :: PP						  
+myXmobarPP =					 
+  def					      
+    { ppSep = wal " | ",					       
+      ppTitleSanitize = xmobarStrip,			       
       ppCurrent = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2,
       ppHidden = white . wrap " " "",
       --  ppHiddenNoWindows = lowWhite . wrap " " "", -- IF YOU WANT ALL WORKSPACES ON THE BAR
@@ -119,12 +121,13 @@ defaults = def
   -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
   , ((myModMask, xK_p), spawn "bash /home/ame/.config/wal/dmen.sh")
+  , ((myModMask, xK_c), spawn "speedcrunch")
   , ((myModMask .|. shiftMask, xK_d), spawn "discord")
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
   , ((myModMask .|. shiftMask, xK_t), spawn myFM)
   , ((myModMask .|. shiftMask, xK_b), withFocused toggleBorder)
   , ((myModMask .|. shiftMask, xK_r), spawn "bash /home/ame/.config/screenlayout.sh")
   , ((0, xF86XK_AudioPlay) , spawn "playerctl -p spotify play-pause")
-  , ((0, xF86XK_AudioPrev) , spawn "playerctl  previous")
-  , ((0, xF86XK_AudioNext) , spawn "playerctl next")
+  , ((0, xF86XK_AudioPrev) , spawn "playerctl -p spotify previous")
+  , ((0, xF86XK_AudioNext) , spawn "playerctl -p spotify next")
   ]

@@ -1,1 +1,1 @@
-curl wttr.in/?format="%c+%f\n"
+curl wttr.in/?format="%c"

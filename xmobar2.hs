@@ -8,7 +8,7 @@ Config { font         = "Terminus"
        , lowerOnStart = True
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = "%XMonadLog% }{  %packages% | %playing% | %multicpu% | RAM: %memory% | %dynnetwork% | %weather% | <fc=#5377b5>%date%</fc> "       
+       , template     = "%XMonadLog% }{  %packages% | %playing% | %multicpu% | RAM: %memory% | %dynnetwork% | %KDFW% | <fc=#5377b5>%date%</fc> "
        , commands     = [ Run DynNetwork [ "--template" , "Up: <tx>kB/s | Down: <rx>kB/s"
                                          , "--Low"      , "1000"       -- units: kB/s
                                          , "--High"     , "5000"       -- units: kB/s
@@ -17,10 +17,10 @@ Config { font         = "Terminus"
                                          , "--high"     , "darkred"
                                          ] 10
                         , Run MultiCpu ["autosystem", "autobar"] 50
+                        , Run Weather "KDFW" ["-t", "<skyCondition> <tempF>°", "-L", "50", "-H", "90", "--normal", "grey", "--high", "#de5e5e", "--low", "lightblue"] 36000
                         , Run Memory ["-t","<used> Gb", "-d", "1", "--", "--scale", "1024"] 50
                         , Run Date "%I:%M" "date" 10
 			, Run Alsa "default" "Master" [ "--template", "<volumestatus>", "--suffix", "True", "--", "--on", "" ]
-                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/wttr.sh"] "weather" 36000
                         , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 10
 			, Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/packages.sh"] "packages" 1000
                         , Run XMonadLog
