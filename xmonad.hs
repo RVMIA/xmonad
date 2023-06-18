@@ -30,7 +30,7 @@ import XMonad.Layout.SimpleFloat
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
-myColor = "#5377b5"
+myColor = "#6e18cc"
 --myColor = "#5e6f50"
 myModMask = mod4Mask            
 myBorderWidth = 3               
@@ -65,7 +65,7 @@ myXmobarPP =
   def					      
     { ppSep = wal " | ",					       
       ppTitleSanitize = xmobarStrip,			       
-      ppCurrent = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2,
+      ppCurrent = wrap " " "" . xmobarBorder "Top" "#3bae4b" 2,
       ppHidden = white . wrap " " "",
       --  ppHiddenNoWindows = lowWhite . wrap " " "", -- IF YOU WANT ALL WORKSPACES ON THE BAR
       ppHiddenNoWindows = const "",

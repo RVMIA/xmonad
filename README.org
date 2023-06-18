@@ -37,7 +37,7 @@ Modules to import.
 #+end_src
 * Constants
 #+begin_src haskell
-  myColor = "#5377b5"
+  myColor = "#6e18cc"
   --myColor = "#5e6f50"
   myModMask = mod4Mask            
   myBorderWidth = 3               
@@ -78,7 +78,7 @@ Modules to import.
     def					      
       { ppSep = wal " | ",					       
 	ppTitleSanitize = xmobarStrip,			       
-	ppCurrent = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2,
+	ppCurrent = wrap " " "" . xmobarBorder "Top" "#3bae4b" 2,
 	ppHidden = white . wrap " " "",
 	--  ppHiddenNoWindows = lowWhite . wrap " " "", -- IF YOU WANT ALL WORKSPACES ON THE BAR
 	ppHiddenNoWindows = const "",

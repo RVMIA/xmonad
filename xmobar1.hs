@@ -1,14 +1,14 @@
 Config { font         = "Terminus"
        , textOffset   = 1
        , border       = BottomBM 1
-       , borderColor  = "#5377b5"
-       , bgColor      = "#1d2432"
+       , borderColor  = "#6e18cc"
+       , bgColor      = "#0f0f0f"
        , fgColor      = "grey"
        , position     = TopH 23
        , lowerOnStart = True
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = "%XMonadLog% }{ | <fc=#5377b5>%date%</fc> "
+       , template     = "%XMonadLog% }{ | <fc=#3b56dc>%date%</fc> "
        , commands     = [ Run DynNetwork [ "--template" , "<tx>kB/s | <rx>kB/s"
                                          , "--Low"      , "1000"       -- units: kB/s
                                          , "--High"     , "5000"       -- units: kB/s

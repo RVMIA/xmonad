@@ -1,8 +1,8 @@
 Config { font         = "Terminus"
        , textOffset   = 1
        , border       = BottomBM 1
-       , borderColor  = "#5377b5"
-       , bgColor      = "#1d2432"
+       , borderColor  = "#6e18cc"
+       , bgColor      = "#0f0f0f"
        , fgColor      = "grey"
        , position     = TopH 23
        , lowerOnStart = True
