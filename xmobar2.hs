@@ -8,7 +8,7 @@ Config { font         = "Terminus"
        , lowerOnStart = True
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = "%XMonadLog% }{  %packages% | %playing% | %multicpu% | RAM: %memory% | %dynnetwork% | %KDFW% | <fc=#5377b5>%date%</fc> "
+       , template     = "%XMonadLog% }{  %packages% | %playing% | %multicpu% | RAM: %memory% | %dynnetwork% | %KDFW% | <fc=#6e18cc>%date%</fc> "
        , commands     = [ Run DynNetwork [ "--template" , "Up: <tx>kB/s | Down: <rx>kB/s"
                                          , "--Low"      , "1000"       -- units: kB/s
                                          , "--High"     , "5000"       -- units: kB/s
@@ -21,8 +21,8 @@ Config { font         = "Terminus"
                         , Run Memory ["-t","<used> Gb", "-d", "1", "--", "--scale", "1024"] 50
                         , Run Date "%I:%M" "date" 10
 			, Run Alsa "default" "Master" [ "--template", "<volumestatus>", "--suffix", "True", "--", "--on", "" ]
-                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 10
-			, Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/packages.sh"] "packages" 1000
+                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/scripts/spotify.sh"] "playing" 10
+			, Run Com "/bin/bash" ["-c", "/home/ame/.config/scripts/packages.sh"] "packages" 1000
                         , Run XMonadLog
                         ]
 

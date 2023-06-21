@@ -9,7 +9,7 @@ Modules to import.
   import Graphics.X11.ExtraTypes.XF86
 
   import XMonad
-    
+
   import XMonad.ManageHook
   import XMonad.Hooks.DynamicLog
   import XMonad.Hooks.EwmhDesktops
@@ -17,6 +17,7 @@ Modules to import.
   import XMonad.Hooks.ManageDocks
   import XMonad.Hooks.StatusBar
   import XMonad.Hooks.StatusBar.PP
+  import XMonad.Hooks.WindowSwallowing
 
   import XMonad.Prompt
   import XMonad.Prompt.ConfirmPrompt
@@ -37,14 +38,14 @@ Modules to import.
 #+end_src
 * Constants
 #+begin_src haskell
-  myColor = "#6e18cc"
+  myColor = "#df5714"
   --myColor = "#5e6f50"
   myModMask = mod4Mask            
-  myBorderWidth = 3               
+  myBorderWidth = 1              
   myNormalBorderColor = "#1d2021" 
   myFocusedBorderColor = myColor
   myBrowser = "librewolf"
-  myTerminal = "kitty"
+  myTerminal = "alacritty"
   -- myTerminal = "emacsclient -c -a emacs --eval '(multi-vterm)'"
   myFM = "thunar"
 #+end_src
@@ -59,6 +60,10 @@ Modules to import.
 	className =? "discord" --> doShift "9",
 	className =? "SpeedCrunch" --> doFloat
       ]
+#+end_src
+* HandleEventHook
+#+begin_src haskell
+  myHandleEventHook = swallowEventHook (className =? "Kitty" <||> className =? "Alacritty") (return True)
 #+end_src
 * Layout
 #+begin_src haskell
@@ -130,6 +135,7 @@ Modules to import.
     , normalBorderColor = myNormalBorderColor
     , focusedBorderColor = myFocusedBorderColor
     , manageHook = myManageHook
+    , handleEventHook = myHandleEventHook
     , layoutHook = myLayout
     } `additionalKeys`
     [ ((myModMask, xK_f), spawn myBrowser)
@@ -140,7 +146,6 @@ Modules to import.
     -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
     , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
     , ((myModMask, xK_p), spawn "bash /home/ame/.config/wal/dmen.sh")
-    , ((myModMask, xK_c), spawn "speedcrunch")
     , ((myModMask .|. shiftMask, xK_d), spawn "discord")
     , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
     , ((myModMask .|. shiftMask, xK_t), spawn myFM)

@@ -12,6 +12,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
+import XMonad.Hooks.WindowSwallowing
 
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
@@ -30,14 +31,14 @@ import XMonad.Layout.SimpleFloat
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
-myColor = "#6e18cc"
+myColor = "#df5714"
 --myColor = "#5e6f50"
 myModMask = mod4Mask            
-myBorderWidth = 3               
+myBorderWidth = 1              
 myNormalBorderColor = "#1d2021" 
 myFocusedBorderColor = myColor
 myBrowser = "librewolf"
-myTerminal = "kitty"
+myTerminal = "alacritty"
 -- myTerminal = "emacsclient -c -a emacs --eval '(multi-vterm)'"
 myFM = "thunar"
 
@@ -50,6 +51,8 @@ myManageHook =
       className =? "discord" --> doShift "9",
       className =? "SpeedCrunch" --> doFloat
     ]
+
+myHandleEventHook = swallowEventHook (className =? "Kitty" <||> className =? "Alacritty") (return True)
 
 myLayout = (tiled ||| Mirror tiled ||| Full)
   where										   
@@ -111,6 +114,7 @@ defaults = def
   , normalBorderColor = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
   , manageHook = myManageHook
+  , handleEventHook = myHandleEventHook
   , layoutHook = myLayout
   } `additionalKeys`
   [ ((myModMask, xK_f), spawn myBrowser)
@@ -121,7 +125,6 @@ defaults = def
   -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
   , ((myModMask, xK_p), spawn "bash /home/ame/.config/wal/dmen.sh")
-  , ((myModMask, xK_c), spawn "speedcrunch")
   , ((myModMask .|. shiftMask, xK_d), spawn "discord")
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
   , ((myModMask .|. shiftMask, xK_t), spawn myFM)
