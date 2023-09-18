@@ -2,9 +2,7 @@ import System.Exit
 import System.Posix.Process
 import Control.Monad
 import Graphics.X11.ExtraTypes.XF86
-
 import XMonad
-
 import XMonad.ManageHook
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -13,38 +11,36 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.WindowSwallowing
-
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
 import XMonad.Prompt.Man
 import XMonad.Prompt.XMonad
-
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
 import XMonad.Util.Run
 import XMonad.Util.Dmenu
-
 import XMonad.Actions.NoBorders
-
+import XMonad.Layout.NoBorders
 import XMonad.Layout.SimpleFloat
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
+import XMonad.Layout.Gaps
+import XMonad.Layout.Spacing
 
 myColor = "#df5714"
---myColor = "#5e6f50"
-myModMask = mod4Mask            
-myBorderWidth = 1              
-myNormalBorderColor = "#1d2021" 
+myNormalBorderColor = "#1d2021"
 myFocusedBorderColor = myColor
-myBrowser = "librewolf"
+myModMask = mod4Mask
+myBorderWidth = 4
+
+myBrowser = "firefox-bin"
 myTerminal = "alacritty"
--- myTerminal = "emacsclient -c -a emacs --eval '(multi-vterm)'"
 myFM = "thunar"
 
-myManageHook :: ManageHook						     
-myManageHook =						   
-  composeAll			       
+myManageHook :: ManageHook
+myManageHook =
+  composeAll
     [ className =? "Gimp" --> doFloat,
       isDialog --> doFloat,
       className =? "Spotify" --> doShift "9",
@@ -54,20 +50,20 @@ myManageHook =
 
 myHandleEventHook = swallowEventHook (className =? "Kitty" <||> className =? "Alacritty") (return True)
 
-myLayout = (tiled ||| Mirror tiled ||| Full)
-  where										   
-    tiled = Tall nmaster delta ratio
+myLayout =  (lessBorders Screen) $ (tiled ||| Mirror tiled ||| Full)
+  where
+    tiled =  smartSpacingWithEdge 10 $ Tall nmaster delta ratio
     nmaster = 1
     ratio = 1 / 2
     delta = 3 / 100
 
 xmobar1 = statusBarProp "xmobar -x 0 $HOME/.config/xmonad/xmobar1.hs" (pure myXmobarPP)
 xmobar2 = statusBarProp "xmobar -x 1 $HOME/.config/xmonad/xmobar2.hs" (pure myXmobarPP)
-myXmobarPP :: PP						  
-myXmobarPP =					 
-  def					      
-    { ppSep = wal " | ",					       
-      ppTitleSanitize = xmobarStrip,			       
+myXmobarPP :: PP
+myXmobarPP =
+  def
+    { ppSep = wal " | ",
+      ppTitleSanitize = xmobarStrip,
       ppCurrent = wrap " " "" . xmobarBorder "Top" "#3bae4b" 2,
       ppHidden = white . wrap " " "",
       --  ppHiddenNoWindows = lowWhite . wrap " " "", -- IF YOU WANT ALL WORKSPACES ON THE BAR
@@ -89,7 +85,7 @@ myXmobarPP =
     red = xmobarColor "#ff5555" ""
     lowWhite = xmobarColor "#bbbbbb" ""
     grey = xmobarColor "#8e8e8e" ""
-    green = xmobarColor "#8ba37d" "" 
+    green = xmobarColor "#8ba37d" ""
     wal = xmobarColor myColor ""
 
 quitWithWarning :: X ()
@@ -114,17 +110,17 @@ defaults = def
   , normalBorderColor = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
   , manageHook = myManageHook
-  , handleEventHook = myHandleEventHook
+ -- , handleEventHook = myHandleEventHook  --  window swallowing
   , layoutHook = myLayout
   } `additionalKeys`
   [ ((myModMask, xK_f), spawn myBrowser)
+  , ((myModMask .|. shiftMask, xK_f), spawn "google-chrome-stable")
   -- , ((myModMask .|. shiftMask, xK_q), quitWithWarning)  -- NEEDS DMENU
   , ((myModMask, xK_q), spawn "xmonad --restart")
   , ((myModMask .|. shiftMask, xK_l), spawn "slock")
-  , ((myModMask .|. shiftMask, xK_e), spawn "emacsclient -c -a emacs")
-  -- , ((myModMask .|. shiftMask, xK_Return), spawn "emacsclient -c --eval '(vterm)'")
   , ((myModMask .|. shiftMask, xK_p), spawn "spotify")
-  , ((myModMask, xK_p), spawn "bash /home/ame/.config/wal/dmen.sh")
+ -- , ((myModMask, xK_p), spawn "bash /home/ame/.config/wal/dmen.sh")
+  , ((myModMask, xK_p), spawn "dmenu_run -nb \"#0f0f0f\" -sb \"#6E18CC\"")
   , ((myModMask .|. shiftMask, xK_d), spawn "discord")
   , ((myModMask .|. shiftMask, xK_s), spawn "maim -s /home/ame/Pictures/screenshots/$(date +%s)-screenshot.png && thunar ~/Pictures/screenshots/")
   , ((myModMask .|. shiftMask, xK_t), spawn myFM)
