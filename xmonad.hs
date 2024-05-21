@@ -69,7 +69,7 @@ main = xmonad . ewmh . ewmhFullscreen . withEasySB (xmobar1 <> xmobar2) defToggl
 
 myKeys :: [((KeyMask, KeySym), X ())]
 myKeys =
-  [ ((mM, xK_f), spawn "firefox-bin")
+  [ ((mM, xK_f), spawn "firefox")
   , ((mM .|. shiftMask, xK_f), spawn "google-chrome-stable")
   , ((mM, xK_q), spawn "xmonad --restart")
   , ((mM .|. shiftMask, xK_l), spawn "slock")
