@@ -19,10 +19,9 @@ Config { font         = "Terminess Nerd Font"
                         , Run MultiCpu ["autosystem", "autobar"] 50
                         , Run Weather "KDFW" ["-t", "<skyCondition> <tempF> deg.", "-L", "50", "-H", "90", "--normal", "grey", "--high", "#de5e5e", "--low", "lightblue"] 36000
                         , Run Memory ["-t","<used> Gb", "-d", "1", "--", "--scale", "1024"] 50
-                        , Run Date "%I:%M" "date" 10
-                        , Run Alsa "default" "Master" [ "--template", "<volumestatus>", "--suffix", "True", "--", "--on", "" ]
-                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/scripts/spotify.sh"] "playing" 10
-                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/scripts/packages.sh"] "packages" 1000
+                        , Run Date "%a %m/%d %I:%M" "date" 10
+                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/spotify.sh"] "playing" 10
+                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/scripts/packages.sh"] "packages" 1000
                         , Run XMonadLog
                         ]
 
