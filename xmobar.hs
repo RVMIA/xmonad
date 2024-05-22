@@ -20,8 +20,7 @@ Config { font         = "Terminess Nerd Font"
                         , Run Weather "KDFW" ["-t", "<skyCondition> <tempF> deg.", "-L", "50", "-H", "90", "--normal", "grey", "--high", "#de5e5e", "--low", "lightblue"] 36000
                         , Run Memory ["-t","<used> Gb", "-d", "1", "--", "--scale", "1024"] 50
                         , Run Date "%a %m/%d %I:%M" "date" 10
-                        , Run Com "/bin/bash" ["-c", "/home/ame/.config/xmonad/spotify.sh"] "playing" 10
-                        , Run Com "/bin/bash" ["-c", "echo $(equery list '*' | wc -l) pkgs"] "packages" 1000
+                        , Run Com "/bin/bash" ["-c", "~/dotfiles/scripts/spotify.sh"] "playing" 10
                         , Run XMonadLog
                         ]
 
